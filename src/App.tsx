@@ -1,19 +1,21 @@
 import "./App.css";
-import { useTimer } from "react-timer-hook";
+import { useTimeout } from "./timer";
+
+import { useQueryParam, useQueryParamAsNumber } from "./utils/queryParams";
+
+import * as dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 
 function App() {
-  const params = new URLSearchParams(window.location.search);
-  const time = params.get("time");
-  const [inputHours, inputMinutes] =
-    time?.split(":").map((s) => parseInt(s, 10) || 0) ?? [];
-  const expiry = new Date();
-  expiry.setHours(inputHours, inputMinutes, 0);
-  const { hours, minutes, seconds } = useTimer({ expiryTimestamp: expiry });
+  const [expiredText] = useQueryParam("expired");
+  const [hours] = useQueryParamAsNumber("h");
+  const [minutes] = useQueryParamAsNumber("m");
+  const { remainingTime, expired } = useTimeout(hours, minutes);
 
   return (
     <div className="App">
-      {!!hours && `${hours}:`}
-      {minutes}:{`${seconds}`.padStart(2, "0")}
+      {expired ? expiredText : dayjs.duration(remainingTime).format("m:ss")}
     </div>
   );
 }
