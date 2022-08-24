@@ -1,6 +1,4 @@
-import "./App.css";
 import { useTimeout } from "./timer";
-
 import { useQueryParam, useQueryParamAsNumber } from "./utils/queryParams";
 
 import * as dayjs from "dayjs";
@@ -14,7 +12,7 @@ function App() {
   const { remainingTime, expired } = useTimeout(hours, minutes);
 
   return (
-    <div className="App">
+    <div className="flex w-screen h-screen items-center justify-center">
       {expired ? expiredText : dayjs.duration(remainingTime).format("m:ss")}
     </div>
   );
