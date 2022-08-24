@@ -9,11 +9,19 @@ function App() {
   const [expiredText] = useQueryParam("expired");
   const [hours] = useQueryParamAsNumber("h");
   const [minutes] = useQueryParamAsNumber("m");
+  const [style, setStyle] = useQueryParam("style");
   const { remainingTime, expired } = useTimeout(hours, minutes);
 
   return (
-    <div className="flex w-screen h-screen items-center justify-center">
-      {expired ? expiredText : dayjs.duration(remainingTime).format("m:ss")}
+    <div className="flex flex-col gap-2 w-screen h-screen items-center justify-center">
+      <style dangerouslySetInnerHTML={{ __html: `#timer { ${style} }` }} />
+      <h1 id="timer">
+        {expired ? expiredText : dayjs.duration(remainingTime).format("m:ss")}
+      </h1>
+      <textarea
+        value={style}
+        onChange={({ target }) => setStyle(target.value)}
+      />
     </div>
   );
 }
